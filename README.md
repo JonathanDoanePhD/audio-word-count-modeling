@@ -1,45 +1,21 @@
-# Erdos_2022_05_Audio_Project
-Erdos Institute's May Data Science Boot Camp, 2022
+# Counting Words in Audio
 
+A 2022 Erdős Institute data science project investigating whether audio features and statistical models can improve word counting from speech clips. The work compares silence-based counting, regression models, and validation baselines rather than claiming a production speech-recognition system.
 
-### Data source: 
+## Question and approach
 
-*common-voice2 - Kaggle*
-<br>
-*https://www.kaggle.com/datasets/danielgraham1997/commonvoice2*
+Given a short audio clip, how accurately can we estimate its number of spoken words? We analyzed roughly 2,800 Mozilla Common Voice clips, explored signal-derived features, tuned a silence-based counter, and compared linear and multiclass approaches. The three-feature regression model reduced validation mean squared error against a fixed-parameter counter; its modest R² is an important limit on the strength of the prediction.
 
+## Start here
 
+- [Project summary and findings](Summary.ipynb)
+- [Exploratory analysis](01_1_EDA_DongJoanne.ipynb)
+- [Multiple linear regression](02_2_ML_Multiple_Linear_Regression.ipynb)
+- [Model comparison](03_1_ValTest_of_ML_Models.ipynb)
+- [Further validation](03_2_ValTest_of_MLR_Model.ipynb)
 
+The repository includes intermediate notebooks, derived data, and experimental work from the original project. Read the summary first for context. This is a retrospective research exercise; it was not deployed as a speech service.
 
-# OVERVIEW - LENA Foundation inspired audio project
+## Data and collaborators
 
-## Count spoken words in audio clips
-
-Given an audio clip, we want to count the number of spoken words it contains. 
-There are parameters used to split audio clips at "silences" which we optimize.
-We use machine learning models to find the features which effect the accuracy of our counter (for example, if our counter more accurate for females than males, we will account for that).
-
-Later, we want to make a model which can associate word counts with people 
-(e.g. 100 words by child, 300 words by mother, 500 words by teacher in a specific day). 
-
-
->### Most helpful link:
-
->*Split audio files using silence detection - StackOverflow*
-<br>
->*https://stackoverflow.com/questions/45526996/split-audio-files-using-silence-detection*
-
-
->>### Other links to consider:
-
->>*Audio signal split at word level boundary - StackOverflow*
-<br>
-*https://stackoverflow.com/questions/64153590/audio-signal-split-at-word-level-boundary*
-
->>*Split speech audio file on words in python - StackOverflow*
-<br>
-*https://stackoverflow.com/questions/36458214/split-speech-audio-file-on-words-in-python*
-
->>*Using pyDub to chop up a long audio file - StackOverflow*
-<br>
-*https://stackoverflow.com/questions/23730796/using-pydub-to-chop-up-a-long-audio-file*
+The source was the [Common Voice 2 dataset on Kaggle](https://www.kaggle.com/datasets/danielgraham1997/commonvoice2). This was a team project at the Erdős Institute; notebook names preserve collaborators' contributions. See the notebooks for specific methods and results.
