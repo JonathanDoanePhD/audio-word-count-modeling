@@ -1,24 +1,66 @@
 # Counting Words in Audio
 
-A 2022 Erdős Institute data science project investigating whether audio features and statistical models can improve word counting from speech clips. The work compares silence-based counting, regression models, and validation baselines rather than claiming a production speech-recognition system.
+**An exploratory study of speech measurement, acoustic features, and adaptive analyzer selection.**
 
-[<img width="1536" height="864" alt="Counting Words in Audio" src="https://github.com/user-attachments/assets/ee0c3963-b8bf-4d77-98c0-0f4ac6f265b7" />](https://drive.google.com/file/d/1lejr31wBK4knTjxI_1BN81f3KYzHjGAP/view?usp=drive_link)
+Inspired by LENA's early-talk mission, this 2022 Erdős Institute team project asked whether properties of a recording could guide the choice of a silence-based word counter. It connects a practical measurement question with data preparation, statistical modeling, visual communication, and careful interpretation.
 
-
-## Question and approach
-
-Given a short audio clip, how accurately can we estimate its number of spoken words? We analyzed roughly 2,800 Mozilla Common Voice clips, explored signal-derived features, tuned a silence-based counter, and compared linear and multiclass approaches. The three-feature regression model reduced validation mean squared error against a fixed-parameter counter; its modest R² is an important limit on the strength of the prediction.
+**Key finding:** acoustic features explained some variation in analyzer choice, but a retrospective evaluation of final word counts did not demonstrate a test-set advantage for the acoustic selector. This repository now separates the original experiments from a reproducible evaluation using comparable metrics.
 
 ## Start here
 
-- [Project summary and findings](Summary.ipynb)
-- [Exploratory analysis](01_1_EDA_DongJoanne.ipynb)
-- [Multiple linear regression](02_2_ML_Multiple_Linear_Regression.ipynb)
-- [Model comparison](03_1_ValTest_of_ML_Models.ipynb)
-- [Further validation](03_2_ValTest_of_MLR_Model.ipynb)
+- [Research brief: question, methods, findings, and implications](docs/research-brief.md)
+- [Runnable summary notebook](Summary.ipynb)
+- [Evaluation methodology and corrections](docs/methodology.md)
+- [Data dictionary and provenance](docs/data-dictionary.md)
+- [Recomputed results](reports/metrics.csv) and [descriptive subgroup errors](reports/subgroup_metrics.csv)
+- [Original 2022 notebooks](notebooks/legacy/) retained for research provenance
 
-The repository includes intermediate notebooks, derived data, and experimental work from the original project. Read the summary first for context. This is a retrospective research exercise; it was not deployed as a speech service.
+![Mean absolute word-count error by evaluation split](reports/word-count-error.svg)
 
-## Data and collaborators
+## Results in plain language
 
-The source was the [Common Voice 2 dataset on Kaggle](https://www.kaggle.com/datasets/danielgraham1997/commonvoice2). This was a team project at the Erdős Institute; notebook names preserve collaborators' contributions. See the notebooks for specific methods and results.
+A silence-based counter treats speech separated by pauses as a proxy for words. We explored 64 parameter configurations and fit linear regression to predict an analyzer ID from onset count, mean onset strength, and the archived dominant-frequency feature.
+
+The retrospective evaluation fits the selector on training data, rounds and bounds its predicted ID, looks up that analyzer's stored word count, and compares the resulting count with the transcript word count.
+
+| Method | Validation MAE (words) | Test MAE (words) | Test MSE (words squared) |
+| --- | ---: | ---: | ---: |
+| Original fixed counter | 4.580 | 4.675 | 72.460 |
+| Fixed counter selected on training relative error | 3.678 | 4.395 | 74.650 |
+| Acoustic analyzer selector | 4.280 | 4.910 | 105.135 |
+
+Lower error is better. The train-selected fixed counter has the lowest test MAE of these methods, while the original fixed counter has the lowest test MSE. The selector's training R² is 0.107 for **analyzer ID**, not word count.
+
+The historical “76.9% lower MSE” comparison mixed analyzer IDs with word-count ratios. It does not support a word-count improvement or “twice the accuracy” claim. The [methodology](docs/methodology.md) explains the correction and other limitations.
+
+## Reproduce the table evaluation
+
+Python 3.12 was used for this retrospective review. The committed environment records the versions actually tested.
+
+```bash
+python -m venv .venv
+# Activate your virtual environment, then:
+python -m pip install -r requirements.txt
+python scripts/evaluate.py --data-dir . --output-dir reports
+python -m unittest discover -s tests
+```
+
+This workflow uses the three committed derived TSV tables, requires no audio download, and does not execute the historical notebooks. It writes final-count metrics, subgroup summaries, and a data audit with input hashes and fitted coefficients. The checked-in chart summarizes these results.
+
+To regenerate the chart, run `python scripts/plot_results.py`.
+
+To inspect interactively, install Jupyter in your environment and launch Jupyter from the repository root and open `Summary.ipynb`.
+
+## Data and scope
+
+The [Common Voice 2 subset on Kaggle](https://www.kaggle.com/datasets/danielgraham1997/commonvoice2) contains short English read-speech clips: 2,000 training, 400 validation, and 400 test. The supplied subset description identifies the source release as `en_1488h_2019-12-10`. See [the original subset instructions](commonvoice/README.txt).
+
+This is independent, LENA-inspired research using Common Voice data. It did not use LENA system data, test child-development outcomes, count conversational turns, or validate a caregiver feedback program. Short read speech differs substantially from natural caregiver-child recordings.
+
+## Contributors
+
+- **Jonathan Doane**, Binghamton University: project lead; original notebooks and analysis.
+- **Joanne Dong**, University of Michigan: collaborator; exploratory analysis retained with attribution.
+- **Dananjaya Liyanage**: project mentor.
+
+Original work: Erdős Institute, 2022. Retrospective evaluation and documentation: October 2026. Original research artifacts are preserved separately; the review does not reconstruct every historical execution step. Code licensing is documented in [LICENSE](LICENSE); dataset terms should be checked separately at the source.
