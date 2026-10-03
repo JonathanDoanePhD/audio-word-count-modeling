@@ -1,0 +1,48 @@
+{
+  "files": {
+    "train": {
+      "sha256": "298a74559d30717fd74049323ebc29990bae4ef14333288d51f436168f2ddf7f",
+      "rows": 2000,
+      "speakers": 595,
+      "missing_accent": 505,
+      "transcript_count_mismatches": 0
+    },
+    "validation": {
+      "sha256": "414914865872f0a287470e5b2660ccceba4bee5adfbedae894d8fea60c64967e",
+      "rows": 400,
+      "speakers": 167,
+      "missing_accent": 144,
+      "transcript_count_mismatches": 0
+    },
+    "test": {
+      "sha256": "f90450161e016473f49830161337a517b18ebacf31530513b205a7224526ed7b",
+      "rows": 400,
+      "speakers": 244,
+      "missing_accent": 117,
+      "transcript_count_mismatches": 0
+    }
+  },
+  "speaker_overlap": {
+    "train/validation": 0,
+    "train/test": 0,
+    "validation/test": 0
+  },
+  "model": {
+    "features": [
+      "num_onsets",
+      "onset_stren_mean",
+      "dom_freq"
+    ],
+    "target": "MEDIAN_func_num",
+    "training_r2": 0.10714123172971535,
+    "coefficients": [
+      0.5494247609268853,
+      8.374382574340485,
+      0.01236749930521
+    ],
+    "intercept": 8.563085267894625,
+    "train_selected_counter": "count_16_n-4_15",
+    "selection_metric": "training mean absolute relative error",
+    "rounding": "nearest integer, ties to even; clip to 0..63"
+  }
+}

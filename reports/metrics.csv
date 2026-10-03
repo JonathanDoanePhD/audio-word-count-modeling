@@ -1,0 +1,7 @@
+split,method,n,mae_words,mse_words_squared,mean_relative_error,signed_bias_words,exact_match_rate
+validation,Legacy fixed counter,400,4.58,62.67,0.5868856523163798,3.485,0.115
+validation,Train-selected fixed counter,400,3.6775,29.6525,0.47960964539631334,1.1275,0.12
+validation,Acoustic analyzer selector,400,4.28,53.245,0.5683608784791061,2.86,0.1125
+test,Legacy fixed counter,400,4.675,72.46,0.5326095216441327,3.505,0.1225
+test,Train-selected fixed counter,400,4.395,74.65,0.539162848037419,1.66,0.0975
+test,Acoustic analyzer selector,400,4.91,105.135,0.564499086757382,3.41,0.095
